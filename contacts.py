@@ -27,7 +27,12 @@ class Phone(Field):
 
     @staticmethod
     def validate_phone_number(phone_number):
-        return len(phone_number) == 10 and phone_number.isdigit()
+        pattern = r'^\d{10,}$'
+
+        if re.match(pattern, phone_number):
+            return True
+        else:
+            return False
 
     @Field.value.setter
     def value(self, new_phone_number):
@@ -184,6 +189,9 @@ def hello():
 
 @input_error
 def add_contact(name, phone):
+    if not Phone.validate_phone_number(phone):
+        return "Invalid phone number format"
+
     phone_book[name] = phone
     return f"Added {name.title()} with phone {phone}"
 
