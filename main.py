@@ -1,6 +1,7 @@
 import contacts
 import notebook
 import sorter
+import re
 from collections import UserDict
 
 
@@ -20,7 +21,7 @@ def main():
                     print(contacts.hello())
                 elif user_input.startswith("add"):
                     _, name, phone = user_input.split()
-                    print(contacts.add_contact(name, phone))
+                    print(contacts.add_contact(name, phone))          
                 elif user_input.startswith("change"):
                     _, name, phone = user_input.split()
                     print(contacts.change_contact(name, phone))
@@ -45,6 +46,18 @@ def main():
                             print(f"Name: {record.name.value}, Phone: {', '.join(contacts.phone.value for phone in contacts.record.phones)}")
                     else:
                         print("No matching contacts found.")
+                elif user_input.startswith("upcoming birthdays"):
+                    _, days = user_input.split()
+                    days = int(days)
+                    upcoming_birthdays = phone_book.find_upcoming_birthdays(days)
+                    if upcoming_birthdays:
+                        print("Upcoming Birthdays:")
+                        for record in upcoming_birthdays:
+                            name = record.name.value
+                            birthday = record.birthday.value.strftime("%Y-%m-%d")
+                            print(f"{name} ({birthday})")
+                    else:
+                        print("No upcoming birthdays found.")
                 elif user_input == "back":
                     break
                 elif user_input in ["good bye", "close", "exit"]:

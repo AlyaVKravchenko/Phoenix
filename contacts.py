@@ -68,6 +68,9 @@ class Record:
                 return phone
         return None
 
+    def add_birthday(self, birthday):
+        self.birthday = Birthday(birthday)
+
     def days_to_birthday(self):
         if not self.birthday:
             return None                   
@@ -150,6 +153,15 @@ class AddressBook(UserDict):
                 search_match.append(record)
         return search_match
 
+    def find_upcoming_birthdays(self, days):
+        upcoming_birthdays = []
+        today = datetime.today()
+        for record in self.data.values():
+            if record.birthday:
+                delta = record.birthday.value - today
+                if 0 < delta.days <= days:
+                    upcoming_birthdays.append(record)
+        return upcoming_birthdays
 
 def input_error(func):
     def inner(*args, **kwargs):
