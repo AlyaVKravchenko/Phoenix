@@ -32,7 +32,7 @@ class Phone(Field):
         if re.match(pattern, phone_number):
             return True
         else:
-            return False
+            return False 
 
     @Field.value.setter
     def value(self, new_phone_number):
@@ -137,19 +137,19 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def save_to_file(self, filename):
-        data = {"contacts": self.data}
-        with open(filename, "wb") as f:
-            pickle.dump(data, f)
+    # def save_to_file(self, filename):
+    #     data = {"contacts": self.data}
+    #     with open(filename, "wb") as f:
+    #         pickle.dump(data, f)
 
-    def load_data(self, filename):
-        try:
-            with open(filename, 'rb') as f:
-                data = pickle.load(f)
-                if "contacts" in data:
-                    self.data = data["contacts"]
-        except FileNotFoundError:
-            print("File not found")
+    # def load_data(self, filename):
+    #     try:
+    #         with open(filename, 'rb') as f:
+    #             data = pickle.load(f)
+    #             if "contacts" in data:
+    #                 self.data = data["contacts"]
+    #     except FileNotFoundError:
+    #         print("File not found")
 
     def search(self, query):
         search_match = []
