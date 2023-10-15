@@ -19,10 +19,10 @@ def main():
                 if user_input == "hello":
                     print(contacts.hello())
                 elif user_input.startswith("add"):
-                    _, name, phone = user_input.split()
+                    _, name, phone, email, address = user_input.split()
                     print(contacts.add_contact(name, phone))
                 elif user_input.startswith("change"):
-                    _, name, phone = user_input.split()
+                    _, name, phone, email = user_input.split()
                     print(contacts.change_contact(name, phone))
                 elif user_input.startswith("phone"):
                     _, name = user_input.split()
