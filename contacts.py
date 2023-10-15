@@ -53,12 +53,16 @@ class Email(Field):
             raise ValueError("Invalid email format")
         self._value = new_contact_email
 
+class Address(Field):
+    def __init__(self, contact_address):
+        super().__init__(contact_address)
 
 class Record:
     def __init__(self, name, birthday=None):
         self.name = Name(name)
         self.phones = []
         self.emails = []
+        self.addresses = []
         self.birthday = Birthday(birthday) if birthday else None
 
     def add_email(self, contact_email):
@@ -120,7 +124,20 @@ class Record:
         days_until_birthday = delta.days
         
         return f"There are {days_until_birthday} days to next birthday."
+    
+    def add_address(self, contact_address):
+        address = Address(contact_address)
+        self.addresses.append(address)
 
+    def edit_address(self, old_contact_address, new_contact_address):
+        found = False
+        for address in self.addresses:
+            if address.value == old_contact_address:
+                address.value = new_contact_address
+                found = True
+        if not found:
+            raise ValueError("Such address not found in the record")
+        
 class Birthday(Field):
     def __init__(self, birthday):
         if not self.validate_birthday(birthday):
