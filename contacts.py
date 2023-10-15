@@ -27,7 +27,12 @@ class Phone(Field):
 
     @staticmethod
     def validate_phone_number(phone_number):
-        return len(phone_number) == 10 and phone_number.isdigit()
+        pattern = r'^\d{10,}$'
+
+        if re.match(pattern, phone_number):
+            return True
+        else:
+            return False 
 
     @Field.value.setter
     def value(self, new_phone_number):
@@ -35,52 +40,11 @@ class Phone(Field):
             raise ValueError("Invalid phone number format")
         self._value = new_phone_number
 
-
-class Email(Field):
-    def __init__(self, contact_email):
-        if not self.validate_contact_email(contact_email):
-            raise ValueError("Invalid email format")
-        super().__init__(contact_email)
-
-    @staticmethod
-    def validate_contact_email(contact_email):
-        email_pattern = r"[A-Za-z]+[\.?\w+]+@\w+\.\w{2,}"
-        return len(re.findall(email_pattern, contact_email)) > 0
-    
-    @Field.value.setter
-    def value(self, new_contact_email):
-        if not self.validate_contact_email(new_contact_email):
-            raise ValueError("Invalid email format")
-        self._value = new_contact_email
-
-class Address(Field):
-    def __init__(self, contact_address):
-        super().__init__(contact_address)
-
 class Record:
     def __init__(self, name, birthday=None):
         self.name = Name(name)
         self.phones = []
-        self.emails = []
-        self.addresses = []
         self.birthday = Birthday(birthday) if birthday else None
-
-    def add_email(self, contact_email):
-        email = Email(contact_email)
-        self.emails.append(email)
-
-    def edit_email(self, old_contact_email, new_contact_email):
-        if not Email.validate_contact_email(new_contact_email):
-            raise ValueError("Invalid email format")
-        
-        found = False
-        for email in self.emails:
-            if email.value == old_contact_email:
-                email.value = new_contact_email
-                found = True
-        
-        if not found:
-            raise ValueError("Such email not found in the record")
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
@@ -109,6 +73,9 @@ class Record:
                 return phone
         return None
 
+    def add_birthday(self, birthday):
+        self.birthday = Birthday(birthday)
+
     def days_to_birthday(self):
         if not self.birthday:
             return None                   
@@ -124,20 +91,7 @@ class Record:
         days_until_birthday = delta.days
         
         return f"There are {days_until_birthday} days to next birthday."
-    
-    def add_address(self, contact_address):
-        address = Address(contact_address)
-        self.addresses.append(address)
 
-    def edit_address(self, old_contact_address, new_contact_address):
-        found = False
-        for address in self.addresses:
-            if address.value == old_contact_address:
-                address.value = new_contact_address
-                found = True
-        if not found:
-            raise ValueError("Such address not found in the record")
-        
 class Birthday(Field):
     def __init__(self, birthday):
         if not self.validate_birthday(birthday):
@@ -159,8 +113,10 @@ class Birthday(Field):
         self._value = new_birthday
 
 class AddressBook(UserDict):
-    def __init__(self):
+    def __init__(self, file_path = "contact_book.bin"):
         self.data = {}
+        self.file_path = file_path
+        self.load_data()
         self.page_size = 10  
 
     def iterator(self):
@@ -182,20 +138,24 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
+   
 
-    def save_to_file(self, filename):
-        data = {"contacts": self.data}
-        with open(filename, "wb") as f:
-            pickle.dump(data, f)
-
-    def load_data(self, filename):
+    def load_data(self):
         try:
-            with open(filename, 'rb') as f:
-                data = pickle.load(f)
-                if "contacts" in data:
-                    self.data = data["contacts"]
-        except FileNotFoundError:
-            print("File not found")
+            with open(self.file_path, 'rb') as file:
+                data = pickle.load(file)
+            self.data = data
+        except (FileNotFoundError, EOFError):
+            print(f"Loaded data from {self.file_path}")
+
+    def save_data(self):
+        print(self.data)
+        with open(self.file_path, 'wb') as file:
+            pickle.dump(self.data, file)
+            print(f"Saved data to {self.file_path}")
+
+    def __del__(self):
+        self.save_data() 
 
     def search(self, query):
         search_match = []
@@ -204,52 +164,64 @@ class AddressBook(UserDict):
                 search_match.append(record)
         return search_match
 
+    def find_upcoming_birthdays(self, days):
+        upcoming_birthdays = []
+        today = datetime.today()
+        for record in self.data.values():
+            if record.birthday:
+                delta = record.birthday.value - today
+                if 0 < delta.days <= days:
+                    upcoming_birthdays.append(record)
+        return upcoming_birthdays
 
-def input_error(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except KeyError:
-            return "Enter user name"
-        except ValueError:
-            return "Give me name and phone please"
-        except IndexError:
-            return "Invalid command"
+    def input_error(func):
+        def inner(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except KeyError:
+                return "Enter user name"
+            except ValueError:
+                return "Give me name and phone please"
+            except IndexError:
+                return "Invalid command"
 
-    return inner
+        return inner
 
-phone_book = {}
+    
+    def hello(self):
+        return "How can I help you?"
 
-@input_error
-def hello():
-    return "How can I help you?"
+    @input_error
+    def add_contact(self, name, phone):
+        if not Phone.validate_phone_number(phone):
+            return "Invalid phone number format"
 
-@input_error
-def add_contact(name, phone, email=None, address=None):
-    phone_book[name] = {'Phone': phone, 'Email': email, 'Address': address}
-    return f"Added {name.title()} with phone {phone}"
+        self.data[name] = phone
+        return f"Added {name.title()} with phone {phone}"
 
-@input_error
-def change_contact(name, phone):
-    if name in phone_book:
-        phone_book[name] = phone
-        return f"Changed phone for {name.title()} to {phone}"
-    else:
-        return f"Contact {name.title()} not found"
+    @input_error
+    def change_contact(self, name, phone):
+        if name in data:
+            self.data[name] = phone
+            return f"Changed phone for {name.title()} to {phone}"
+        else:
+            return f"Contact {name.title()} not found"
 
-@input_error
-def get_phone(name):
-    if name in phone_book:
-        return f"The phone for {name.title()} is {phone_book[name]}"
-    else:
-        return f"Contact {name.title()} not found"
-@input_error
-def show_all():
-    if not phone_book:
-        return "Phone book is empty"
-    else:
-        return "\n".join([f"{name.title()}: {phone}, {email}, {address}" for name, phone, email, address in phone_book.items()])
+    @input_error
+    def get_phone(self, name):
+        if name in self.data:
+            return f"The phone for {name.title()} is {data[name]}"
+        else:
+            return f"Contact {name.title()} not found"
+    @input_error
+    def show_all(self):
+        if not self.data:
+            return "Phone book is empty"
+        else:
+            return "\n".join([f"{name.title()}: {phone}" for name, phone in self.data.items()])
 
-@input_error
-def goodbye():
-    return "Good bye!"
+    @input_error
+    def goodbye(self):
+        return "Good bye!"
+    
+    # test
