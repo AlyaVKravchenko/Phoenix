@@ -225,8 +225,8 @@ def hello():
     return "How can I help you?"
 
 @input_error
-def add_contact(name, phone):
-    phone_book[name] = phone
+def add_contact(name, phone, email=None, address=None):
+    phone_book[name] = {'Phone': phone, 'Email': email, 'Address': address}
     return f"Added {name.title()} with phone {phone}"
 
 @input_error
@@ -248,7 +248,7 @@ def show_all():
     if not phone_book:
         return "Phone book is empty"
     else:
-        return "\n".join([f"{name.title()}: {phone}" for name, phone in phone_book.items()])
+        return "\n".join([f"{name.title()}: {phone}, {email}, {address}" for name, phone, email, address in phone_book.items()])
 
 @input_error
 def goodbye():
