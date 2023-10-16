@@ -28,11 +28,7 @@ class Phone(Field):
     @staticmethod
     def validate_phone_number(phone_number):
         pattern = r'^\d{10,}$'
-
-        if re.match(pattern, phone_number):
-            return True
-        else:
-            return False 
+        return True if re.match(pattern, phone_number) else False
 
     @Field.value.setter
     def value(self, new_phone_number):
@@ -40,12 +36,50 @@ class Phone(Field):
             raise ValueError("Invalid phone number format")
         self._value = new_phone_number
 
+class Email(Field):
+    def __init__(self, contact_email):
+        if not self.validate_contact_email(contact_email):
+            raise ValueError("Invalid email format")
+        super().__init__(contact_email)
+
+    @staticmethod
+    def validate_contact_email(contact_email):
+        email_pattern = r"[A-Za-z]+[\.?\w+]+@\w+\.\w{2,}"
+        return len(re.findall(email_pattern, contact_email)) > 0
+    
+    @Field.value.setter
+    def value(self, new_contact_email):
+        if not self.validate_contact_email(new_contact_email):
+            raise ValueError("Invalid email format")
+        self._value = new_contact_email
+
+class Address(Field):
+    def __init__(self, contact_address):
+        super().__init__(contact_address)
+
 class Record:
-    def __init__(self, phone, birthday=None):
+    def __init__(self, phone, email=None, address=None, birthday=None):
         #self.name = Name(name)
         self.phones = []
+        self.emails = []
+        self.address = ''
         self.add_phone(phone)
         self.birthday = Birthday(birthday) if birthday else None
+
+    def add_email(self, contact_email):
+        email = Email(contact_email)
+        self.emails.append(email)
+
+    def edit_email(self, old_contact_email, new_contact_email):
+        if not Email.validate_contact_email(new_contact_email):
+            raise ValueError("Invalid email format")    
+        found = False
+        for email in self.emails:
+            if email.value == old_contact_email:
+                email.value = new_contact_email
+                found = True
+        if not found:
+            raise ValueError("Such email not found in the record")
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
@@ -73,7 +107,13 @@ class Record:
             if phone.value == phone_number:
                 return phone
         return None
-    
+
+    def set_address(self, address):
+        self.address = address
+
+    def set_email(self, email):
+        self.email.append(email)
+
     def set_birthday(self, birthday):
         self.birthday = birthday
     
@@ -102,11 +142,8 @@ class Birthday(Field):
     @staticmethod
     def validate_birthday(birthday):
         pattern = r'^\d{4}-\d{2}-\d{2}$'
-        if re.match(pattern, birthday):
-            return True
-        else:
-            return False
-
+        return True if re.match(pattern, birthday) else False
+    
     @Field.value.setter
     def value(self, new_birthday):
         if not self.validate_birthday(new_birthday):
@@ -150,7 +187,22 @@ class AddressBook(UserDict):
         else:
             print(f"Contact {name.title()} not found.")
         
+    def add_email(self, name, email):
+        if not Email.validate_contact_email(email):
+            raise ValueError("Invalid email format")
+        elif name in self.data:
+            self.data[name].set_email(email)
+            print(f"Email added for {name.title()}.")
+        else:
+            print(f"Contact {name.title()} not found.")
 
+    def add_address(self, name, address):
+        if name in self.data:
+            self.data[name].set_address(address)
+            print(f"Address added for {name.title()}.")
+        else:
+            print(f"Contact {name.title()} not found.")
+    
     def edit_birthday(self, name, new_birthday):
         if not Birthday.validate_birthday(new_birthday):
             raise ValueError("Invalid birthday format")
@@ -252,7 +304,7 @@ class AddressBook(UserDict):
         else:
             for name, record in self.data.items():
                 for phone in record.phones:
-                    print(f"{name.title()}: tel.: {phone._value}, B: {record.birthday}")
+                    print(f"{name.title()}: tel.: {phone._value}, Email: {record.email}, Address: {record.addres} B: {record.birthday}")
            
 
     @input_error
