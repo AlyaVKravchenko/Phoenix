@@ -159,4 +159,4 @@ if __name__ == '__main__':
 
      arg = Path(path)
     
-     main(arg.resolve())
+     main()
