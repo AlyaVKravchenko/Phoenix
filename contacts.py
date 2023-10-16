@@ -58,11 +58,28 @@ class Address(Field):
         super().__init__(contact_address)
 
 class Record:
-    def __init__(self, phone, birthday=None):
+    def __init__(self, phone, email=None, address=None, birthday=None):
         #self.name = Name(name)
         self.phones = []
+        self.emails = []
+        self.addresses = ''
         self.add_phone(phone)
         self.birthday = Birthday(birthday) if birthday else None
+
+    def add_email(self, contact_email):
+        email = Email(contact_email)
+        self.emails.append(email)
+
+    def edit_email(self, old_contact_email, new_contact_email):
+        if not Email.validate_contact_email(new_contact_email):
+            raise ValueError("Invalid email format")    
+        found = False
+        for email in self.emails:
+            if email.value == old_contact_email:
+                email.value = new_contact_email
+                found = True
+        if not found:
+            raise ValueError("Such email not found in the record")
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
@@ -90,7 +107,10 @@ class Record:
             if phone.value == phone_number:
                 return phone
         return None
-    
+
+    def set_address(self, address):
+        self.address = address
+
     def set_birthday(self, birthday):
         self.birthday = birthday
     
@@ -119,11 +139,8 @@ class Birthday(Field):
     @staticmethod
     def validate_birthday(birthday):
         pattern = r'^\d{4}-\d{2}-\d{2}$'
-        if re.match(pattern, birthday):
-            return True
-        else:
-            return False
-
+        return True if re.match(pattern, birthday) else False
+    
     @Field.value.setter
     def value(self, new_birthday):
         if not self.validate_birthday(new_birthday):
