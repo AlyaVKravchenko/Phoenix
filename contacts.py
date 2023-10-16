@@ -190,7 +190,7 @@ class AddressBook(UserDict):
     def add_email(self, name, email):
         if not Email.validate_contact_email(email):
             raise ValueError("Invalid email format")
-        if name in self.data:
+        elif name in self.data:
             self.data[name].set_email(email)
             print(f"Email added for {name.title()}.")
         else:
