@@ -112,7 +112,7 @@ class Record:
         self.address = address
 
     def set_email(self, email):
-        self.email.append(email)
+        self.emails.append(email)
 
     def set_birthday(self, birthday):
         self.birthday = birthday
@@ -323,7 +323,7 @@ class AddressBook(UserDict):
             print("All saved contacts:")
             for name, record in self.data.items():
                 for phone in record.phones:
-                    print(f"{name.title()}: tel.: {phone._value}, Email: {record.email}, Address: {record.addres} B: {record.birthday}")
+                    print(f"{name.title()}: tel.: {phone._value}, Email: {record.emails}, Address: {record.address} B: {record.birthday}")
            
 
     
