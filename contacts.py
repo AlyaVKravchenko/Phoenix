@@ -28,17 +28,34 @@ class Phone(Field):
     @staticmethod
     def validate_phone_number(phone_number):
         pattern = r'^\d{10,}$'
-
-        if re.match(pattern, phone_number):
-            return True
-        else:
-            return False 
+        return True if re.match(pattern, phone_number) else False
 
     @Field.value.setter
     def value(self, new_phone_number):
         if not self.validate_phone_number(new_phone_number):
             raise ValueError("Invalid phone number format")
         self._value = new_phone_number
+
+class Email(Field):
+    def __init__(self, contact_email):
+        if not self.validate_contact_email(contact_email):
+            raise ValueError("Invalid email format")
+        super().__init__(contact_email)
+
+    @staticmethod
+    def validate_contact_email(contact_email):
+        email_pattern = r"[A-Za-z]+[\.?\w+]+@\w+\.\w{2,}"
+        return len(re.findall(email_pattern, contact_email)) > 0
+    
+    @Field.value.setter
+    def value(self, new_contact_email):
+        if not self.validate_contact_email(new_contact_email):
+            raise ValueError("Invalid email format")
+        self._value = new_contact_email
+
+class Address(Field):
+    def __init__(self, contact_address):
+        super().__init__(contact_address)
 
 class Record:
     def __init__(self, phone, birthday=None):
