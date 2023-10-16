@@ -51,6 +51,18 @@ def main():
                 #             print(f"Name: {record.name.value}, Phone: {', '.join(contacts.phone.value for phone in contacts.record.phones)}")
                 #     else:
                 #         print("No matching contacts found.")
+                elif user_input.startswith("add_address"):
+                    name = input("Enter name: ").lower()
+                    address = input("Enter contact address: ")
+                    phone_book.add_address(name, address)
+                    phone_book.save_data()
+
+                elif user_input.startswith("add_email"):
+                    name = input("Enter name: ").lower()
+                    email = input("Enter contact email: ")
+                    phone_book.add_email(name, email)
+                    phone_book.save_data()
+
                 elif user_input.startswith("add_birthday"):
                     name = input("Enter name: ").lower()
                     birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
