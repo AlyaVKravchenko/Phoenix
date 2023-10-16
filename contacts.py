@@ -41,8 +41,8 @@ class Phone(Field):
         self._value = new_phone_number
 
 class Record:
-    def __init__(self, name, birthday=None):
-        self.name = Name(name)
+    def __init__(self, phone, birthday=None):
+        #self.name = Name(name)
         self.phones = []
         self.birthday = Birthday(birthday) if birthday else None
 
@@ -72,10 +72,10 @@ class Record:
             if phone.value == phone_number:
                 return phone
         return None
-
-    def add_birthday(self, birthday):
-        self.birthday = Birthday(birthday)
-
+    
+    def set_birthday(self, birthday):
+        self.birthday = birthday
+    
     def days_to_birthday(self):
         if not self.birthday:
             return None                   
@@ -138,7 +138,23 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-   
+    
+    def add_birthday(self, name, birthday):
+        if not Birthday.validate_birthday(birthday):
+            raise ValueError("Invalid birthday format")
+        if name in self.data:
+            self.data[name].set_birthday(birthday)
+            print(f"Birthday added for {name.title()}.")
+            
+        else:
+            print(f"Contact {name.title()} not found.")
+        
+
+    def edit_birthday(self, new_birthday):
+        if not Birthday.validate_birthday(new_birthday):
+            raise ValueError("Invalid birthday format")
+        self.data[name].set_birthday(new_birthday)
+
 
     def load_data(self):
         try:
@@ -203,7 +219,7 @@ class AddressBook(UserDict):
         if not Phone.validate_phone_number(phone):
             return "Invalid phone number format"
 
-        self.data[name] = phone
+        self.data[name] = Record(phone)
         return f"Added {name.title()} with phone {phone}"
 
     @input_error
@@ -225,7 +241,8 @@ class AddressBook(UserDict):
         if not self.data:
             return "Phone book is empty"
         else:
-            return "\n".join([f"{name.title()}: {phone}" for name, phone in self.data.items()])
+            for name, record in self.data.items():
+                print(f"{name}: tel.: {record.phones}, DB: {record.birthday}")
 
     @input_error
     def goodbye(self):
