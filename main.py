@@ -26,6 +26,9 @@ def main():
                 elif user_input.startswith("change"):
                     _, name, phone = user_input.split()
                     print(phone_book.change_contact(name, phone))
+                if user_input.startswith("delete"):
+                    _, name = user_input.split()
+                    print(phone_book.delete_contact(name))
                 elif user_input.startswith("phone"):
                     _, name = user_input.split()
                     print(phone_book.get_phone(name))

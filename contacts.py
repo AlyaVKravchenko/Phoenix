@@ -164,6 +164,13 @@ class AddressBook(UserDict):
                 search_match.append(record)
         return search_match
 
+    def delete_contact(self, name):
+        if name in self.data:
+            del self.data[name]
+            return f"Contact {name.title()} has been deleted."
+        else:
+            return f"Contact {name.title()} not found."
+
     def find_upcoming_birthdays(self, days):
         upcoming_birthdays = []
         today = datetime.today()
