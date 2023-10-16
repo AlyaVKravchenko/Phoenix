@@ -1,0 +1,71 @@
+Welcome to Your Personal Assistant - Contact Management System!
+
+This program allows you to manage your contacts, notes, and upcoming birthdays.
+
+To get started, follow these simple instructions:
+
+1. At the main menu, you'll be prompted to choose an option:
+   - "contacts" to work with your contact list.
+   - "notes" to manage your notes.
+   - "sorter" for sorting files in a folder (currently unsupported).
+   - "good bye," "close," or "exit" to exit the program.
+
+Managing Contacts:
+-------------------
+
+In the "contacts" menu, you can perform the following actions:
+
+- "hello": Get a friendly greeting from your assistant.
+
+- "new contact": Add a new contact. You'll be prompted to enter the contact's name and phone number.
+
+- "change phone": Update a contact's phone number. Enter the contact's name and the new phone number.
+
+- "delete contact": Delete a contact. Enter the name of the contact you want to delete.
+
+- "find phone": Find the phone number of a contact. Enter the contact's name.
+
+- "show all": Display a list of all your contacts.
+
+- "search": Search for contacts by entering a part of the contact's name.
+
+- "add address": Add an address to a contact. Enter the contact's name and the address.
+
+- "add email": Add an email address to a contact. Enter the contact's name and the email.
+
+- "add birthday": Add a birthday to a contact. Enter the contact's name and the birthday in 'YYYY-MM-DD' format.
+
+- "edit birthday": Edit a contact's birthday. Enter the contact's name and the new birthday.
+
+- "upcoming birthdays": Find upcoming birthdays. Enter the number of upcoming days, and the program will show you the contacts with birthdays in that period.
+
+- "back": Go back to the previous menu.
+
+- "good bye," "close," or "exit": Exit the program, and your data will be saved.
+
+Managing Notes:
+---------------
+
+In the "notes" menu, you can perform the following actions:
+
+- "add note [name]": Add a new note with the specified name. You'll be prompted to enter the note's text.
+
+- "edit note [name]": Edit the text of an existing note with the specified name.
+
+- "delete note [name]": Delete a note with the specified name.
+
+- "search note name [name]": Search for notes by name. Replace "[name]" with the name you're looking for.
+
+- "search note tag [tag]": Search for notes by tag. Replace "[tag]" with the tag you're looking for.
+
+- "view all notes": Display a list of all your notes.
+
+- "add tag [name]": Add a tag to a note by specifying the note's name. You'll be prompted to enter the tag.
+
+- "delete tag [name]": Remove a tag from a note by specifying the note's name.
+
+- "exit": Exit the notes menu.
+
+That's it! You can now use this program to manage your contacts, notes, and upcoming birthdays efficiently.
+
+Enjoy using your personal assistant!
