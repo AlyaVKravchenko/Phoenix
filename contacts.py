@@ -44,6 +44,7 @@ class Record:
     def __init__(self, phone, birthday=None):
         #self.name = Name(name)
         self.phones = []
+        self.add_phone(phone)
         self.birthday = Birthday(birthday) if birthday else None
 
     def add_phone(self, phone_number):
@@ -150,7 +151,7 @@ class AddressBook(UserDict):
             print(f"Contact {name.title()} not found.")
         
 
-    def edit_birthday(self, new_birthday):
+    def edit_birthday(self, name, new_birthday):
         if not Birthday.validate_birthday(new_birthday):
             raise ValueError("Invalid birthday format")
         self.data[name].set_birthday(new_birthday)
@@ -165,7 +166,7 @@ class AddressBook(UserDict):
             print(f"Loaded data from {self.file_path}")
 
     def save_data(self):
-        print(self.data)
+        
         with open(self.file_path, 'wb') as file:
             pickle.dump(self.data, file)
             print(f"Saved data to {self.file_path}")
@@ -188,13 +189,18 @@ class AddressBook(UserDict):
             return f"Contact {name.title()} not found."
 
     def find_upcoming_birthdays(self, days):
+        current_datetime = datetime.now()
+        today = current_datetime.date()
         upcoming_birthdays = []
-        today = datetime.today()
-        for record in self.data.values():
+        for name, record in self.data.items():
             if record.birthday:
-                delta = record.birthday.value - today
-                if 0 < delta.days <= days:
-                    upcoming_birthdays.append(record)
+                year, month, day = record.birthday.split("-")
+                birthday_date = datetime(year=today.year, month=int(month), day=int(day)).date()
+                days_until_birthday = (birthday_date - today).days
+                if 0 < days_until_birthday <= days:
+                    upcoming_birthdays.append((name, days_until_birthday))
+        
+        #upcoming_birthdays.sort(key=lambda x: x[1])  
         return upcoming_birthdays
 
     def input_error(func):
@@ -236,13 +242,18 @@ class AddressBook(UserDict):
             return f"The phone for {name.title()} is {data[name]}"
         else:
             return f"Contact {name.title()} not found"
+    def __str__(self):
+        return self.data
     @input_error
     def show_all(self):
+        
         if not self.data:
             return "Phone book is empty"
         else:
             for name, record in self.data.items():
-                print(f"{name}: tel.: {record.phones}, DB: {record.birthday}")
+                for phone in record.phones:
+                    print(f"{name.title()}: tel.: {phone._value}, B: {record.birthday}")
+           
 
     @input_error
     def goodbye(self):
