@@ -14,27 +14,32 @@ def main():
         user_input = input("Choose (contacts, notes, sorter): ").lower() #тут треба прописати вибір з чим саме будемо працювати. Типу до списку контактів, нотатника чи сортера
         
         if user_input == "contacts":
-             
+                         
             while True:
                 user_input = input("Enter command: ").lower()
 
                 if user_input == "hello":
                     print(phone_book.hello())
+
                 elif user_input.startswith("new"):
                     _, name, phone = user_input.split()
                     print(phone_book.add_contact(name, phone)) 
-                    phone_book.save_data()         
+                    phone_book.save_data()  
+
                 elif user_input.startswith("change"):
                     _, name, phone = user_input.split()
                     print(phone_book.change_contact(name, phone))
                     phone_book.save_data()
-                if user_input.startswith("delete"):
+
+                elif user_input.startswith("delete"):
                     _, name = user_input.split()
                     print(phone_book.delete_contact(name))
                     phone_book.save_data()
+
                 elif user_input.startswith("phone"):
                     _, name = user_input.split()
                     print(phone_book.get_phone(name))
+
                 elif user_input == "show all":
                     print(phone_book.show_all())
                 
@@ -47,26 +52,27 @@ def main():
                 #     else:
                 #         print("No matching contacts found.")
                 elif user_input.startswith("add_birthday"):
-                    name = input("Enter name: ")
+                    name = input("Enter name: ").lower()
                     birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
                     print(phone_book.add_birthday(name, birthday))
                     phone_book.save_data()
+
                 elif user_input.startswith("edit_birthday"):
-                    _, name, new_birthday = user_input.split()
+                    name = input("Enter name: ").lower()
+                    new_birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
                     phone_book.edit_birthday(name, new_birthday)
                     phone_book.save_data()
-                # elif user_input.startswith("upcoming_birthdays"):
-                #     _, days = user_input.split()
-                #     days = int(days)
-                #     upcoming_birthdays = phone_book.find_upcoming_birthdays(days)
-                #     if upcoming_birthdays:
-                #         print("Upcoming Birthdays:")
-                #         for record in upcoming_birthdays:
-                #             name = record.name.value
-                #             birthday = record.birthday.value.strftime("%Y-%m-%d")
-                #             print(f"{name} ({birthday})")
-                #     else:
-                #         print("No upcoming birthdays found.")
+
+                elif user_input == "upcoming_birthdays":
+                    days = int(input("Enter the number of upcoming days: "))
+                    upcoming_birthdays = phone_book.find_upcoming_birthdays(days)
+                    if upcoming_birthdays:
+                        print("Upcoming Birthdays:")
+                        for name, days_until_birthday in upcoming_birthdays:
+                            print(f"{name} ({days_until_birthday} days until their birthday)")
+                    else:
+                        print("No upcoming birthdays found.")
+
                 elif user_input == "back":
                     phone_book.save_data()
                     break
