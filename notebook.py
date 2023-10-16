@@ -39,6 +39,12 @@ class Notebook:
                 self.tag_dictionary[tag] = [note]
                 note.add_tag(tag)
 
+    def remove_tag(self, tag):
+        notes = self.search_notes_by_tag(tag)
+        for note in notes:
+            note.remove_tag(tag)
+        self.tag_dictionary.pop(tag, None)
+
     def add_note(self, note):
         self.notes.append(note)
 
