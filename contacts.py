@@ -62,7 +62,7 @@ class Record:
         #self.name = Name(name)
         self.phones = []
         self.emails = []
-        self.addresses = ''
+        self.address = ''
         self.add_phone(phone)
         self.birthday = Birthday(birthday) if birthday else None
 
@@ -304,7 +304,7 @@ class AddressBook(UserDict):
         else:
             for name, record in self.data.items():
                 for phone in record.phones:
-                    print(f"{name.title()}: tel.: {phone._value}, B: {record.birthday}")
+                    print(f"{name.title()}: tel.: {phone._value}, Email: {record.email}, Address: {record.addres} B: {record.birthday}")
            
 
     @input_error
