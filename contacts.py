@@ -215,7 +215,7 @@ class AddressBook(UserDict):
                 data = pickle.load(file)
             self.data = data
         except (FileNotFoundError, EOFError):
-            print(f"Loaded data from {self.file_path}")
+            pass
 
     def save_data(self):
         
@@ -227,11 +227,25 @@ class AddressBook(UserDict):
         self.save_data() 
 
     def search(self, query):
-        search_match = []
+        
+        # for name, record in self.data.items():
+        #     search_match = []
+        #     if query in name or any(query in phone.value for phone in record.phones):
+        #         search_match.append(record)
+        #     if search_match:
+        #         for record in search_match:
+        #             print(f"Name: {name}, Phone: {[phone._value for phone in record.phones]}")
+        #     else:
+        #         print("No matching contacts found.")
+        found = False
         for name, record in self.data.items():
             if query in name or any(query in phone.value for phone in record.phones):
-                search_match.append(record)
-        return search_match
+                print(f"Name: {name}, Phone: {[phone._value for phone in record.phones]}")
+                found = True
+        if not found:
+            print("No matching contacts found.")
+
+
 
     def delete_contact(self, name):
         if name in self.data:
@@ -282,8 +296,8 @@ class AddressBook(UserDict):
 
     @input_error
     def change_contact(self, name, phone):
-        if name in data:
-            self.data[name] = phone
+        if name in self.data:
+            self.data[name] = Record(phone)
             return f"Changed phone for {name.title()} to {phone}"
         else:
             return f"Contact {name.title()} not found"
@@ -291,22 +305,27 @@ class AddressBook(UserDict):
     @input_error
     def get_phone(self, name):
         if name in self.data:
-            return f"The phone for {name.title()} is {data[name]}"
+            for name, record in self.data.items():
+                for phone in record.phones:
+                    print(f"The phone for {name.title()} is {phone._value}")
+    
         else:
             return f"Contact {name.title()} not found"
     def __str__(self):
         return self.data
-    @input_error
+    
+    
     def show_all(self):
         
         if not self.data:
             return "Phone book is empty"
         else:
+            print("All saved contacts:")
             for name, record in self.data.items():
                 for phone in record.phones:
                     print(f"{name.title()}: tel.: {phone._value}, Email: {record.email}, Address: {record.addres} B: {record.birthday}")
            
 
-    @input_error
+    
     def goodbye(self):
         return "Good bye!"
