@@ -126,11 +126,10 @@ def get_folder_objects(root_path):
             except OSError:
                 pass
 
-def main(dir_path):    
-    path = dir_path
-    print(f"Start in {path}")
+def main(dir_path):
+    print(f"Start in {dir_path}")
 
-    folder_path = Path(path)
+    folder_path = Path(dir_path)
     
     scan(folder_path)
     for file in images:
