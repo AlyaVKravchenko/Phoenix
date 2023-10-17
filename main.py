@@ -49,18 +49,31 @@ def main():
                     query = input("Enter part of contact name: ").lower()
                     phone_book.search(query)
 
-                elif user_input.startswith("add_address"):
+                elif user_input.startswith("add address"):
                     name = input("Enter name: ").lower()
                     address = input("Enter contact address: ")
                     phone_book.add_address(name, address)
                     phone_book.save_data()
 
-                elif user_input.startswith("add_email"):
+                elif user_input.startswith("edit address"):
+                    name = input("Enter name: ").lower()
+                    new_address = input("Enter new contact address: ")
+                    phone_book.edit_address(name, new_address)
+                    phone_book.save_data()
+
+                elif user_input.startswith("add email"):
                     name = input("Enter name: ").lower()
                     email = input("Enter contact email: ")
                     phone_book.add_email(name, email)
                     phone_book.save_data()
 
+                elif user_input.startswith("edit email"):
+                    name = input("Enter name: ").lower()
+                    old_email = input("Enter old email: ")
+                    new_email = input("Enter new email: ")
+                    phone_book.edit_email(name, old_email, new_email)
+                    phone_book.save_data()
+                
                 elif user_input.startswith("add_birthday"):
                     name = input("Enter name: ").lower()
                     birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
