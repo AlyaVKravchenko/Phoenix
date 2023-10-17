@@ -70,6 +70,9 @@ class Record:
         email = Email(contact_email)
         self.emails.append(email)
 
+    def remove_email(self, email):
+        self.emails.remove(email)
+
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
         self.phones.append(phone)
@@ -188,14 +191,14 @@ class AddressBook(UserDict):
     def edit_email(self, name, old_contact_email, new_contact_email):
         if not Email.validate_contact_email(new_contact_email):
             raise ValueError("Invalid email format")    
-        found = False
-        for name, record in self.data.items():
-                for email in record.emails:
-                    if email == old_contact_email:
-                        email = new_contact_email
-                        found = True
-        if not found:
-            raise ValueError("Such email not found in the record")
+        #found = False
+        if name in self.data:
+            for name, record in self.data.items():
+                if old_contact_email in record.emails:
+                    self.data[name].set_email(new_contact_email)
+                    self.data[name].remove_email(old_contact_email)
+        else: 
+            print(f"Sorry")
 
     def add_address(self, name, address):
         if name in self.data:
