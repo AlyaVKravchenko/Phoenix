@@ -89,7 +89,6 @@ class Record:
         if not found:
             raise ValueError("Phone number not found in the record")
             
-
     def find_phone(self, phone_number):
         for phone in self.phones:
             if phone.value == phone_number:
@@ -207,7 +206,6 @@ class AddressBook(UserDict):
             raise ValueError("Invalid birthday format")
         self.data[name].set_birthday(new_birthday)
 
-
     def load_data(self):
         try:
             with open(self.file_path, 'rb') as file:
@@ -233,8 +231,6 @@ class AddressBook(UserDict):
                 found = True
         if not found:
             print("No matching contacts found.")
-
-
 
     def delete_contact(self, name):
         if name in self.data:
@@ -268,7 +264,6 @@ class AddressBook(UserDict):
                 return "Invalid command"
 
         return inner
-
     
     def hello(self):
         return "How can I help you?"
@@ -300,7 +295,6 @@ class AddressBook(UserDict):
             return f"Contact {name.title()} not found"
     def __str__(self):
         return self.data
-    
     
     def show_all(self):
         
