@@ -126,8 +126,8 @@ def get_folder_objects(root_path):
             except OSError:
                 pass
 
-def main():
-    path = sys.argv[1]
+def main(dir_path):    
+    path = dir_path
     print(f"Start in {path}")
 
     folder_path = Path(path)
@@ -153,10 +153,3 @@ def main():
 
     get_folder_objects(folder_path)
 
-if __name__ == '__main__':
-     path = sys.argv[1]
-     print(f"Start in {path}")
-
-     arg = Path(path)
-    
-     main(arg.resolve())

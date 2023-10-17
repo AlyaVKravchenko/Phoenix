@@ -156,9 +156,9 @@ def main():
                 if user_input.startswith("exit"):
                     break
 
-        elif user_input == "sorter":
-            pass  # Тут прописуєм роботу з сортером. Це має бути 1 команда - вказати папку яку будем сортувати
-
+        if user_input == "sorter":
+            folder_path = input("Enter folder path: ")
+            sorter.main(folder_path)
         elif user_input in ["good bye", "close", "exit"]:
             print(phone_book.goodbye())
             is_running = False
