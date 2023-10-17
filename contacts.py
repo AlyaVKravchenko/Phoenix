@@ -15,15 +15,13 @@ class Field:
     def value(self, new_value):
         self._value = new_value
 
-class Name(Field):
-    def __init__(self, name):
-        super().__init__(name)
+# class Name(Field):
+#     def __init__(self, name):
+#         super().__init__(name)
 
 class Phone(Field):
     def __init__(self, phone_number):
-        if not self.validate_phone_number(phone_number):
-            raise ValueError("Invalid phone number format")
-        super().__init__(phone_number)
+        value(phone_number)
 
     @staticmethod
     def validate_phone_number(phone_number):
@@ -38,9 +36,7 @@ class Phone(Field):
 
 class Email(Field):
     def __init__(self, contact_email):
-        if not self.validate_contact_email(contact_email):
-            raise ValueError("Invalid email format")
-        super().__init__(contact_email)
+       value(contact_email)
 
     @staticmethod
     def validate_contact_email(contact_email):
@@ -53,18 +49,18 @@ class Email(Field):
             raise ValueError("Invalid email format")
         self._value = new_contact_email
 
-class Address(Field):
-    def __init__(self, contact_address):
-        super().__init__(contact_address)
+# class Address(Field):
+#     def __init__(self, contact_address):
+#         super().__init__(contact_address)
 
 class Record:
     def __init__(self, phone, email=None, address=None, birthday=None):
         #self.name = Name(name)
         self.phones = []
         self.emails = []
-        self.address = ''
+        self.address = address
         self.add_phone(phone)
-        self.birthday = Birthday(birthday) if birthday else None
+        self.birthday = set_birthday(Birthday(birthday))
 
     def add_email(self, contact_email):
         email = Email(contact_email)
@@ -127,9 +123,7 @@ class Record:
 
 class Birthday(Field):
     def __init__(self, birthday):
-        if not self.validate_birthday(birthday):
-            raise ValueError("Invalid birthday format")
-        super().__init__(birthday)
+        value(birthday)
 
     @staticmethod
     def validate_birthday(birthday):
