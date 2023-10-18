@@ -38,7 +38,7 @@ class Phone(Field):
 class Email(Field):
     def __init__(self, contact_email):
         self.value = contact_email
-        
+
     def __str__(self):
         return self.value
 
@@ -64,7 +64,15 @@ class Record:
         self.emails = []
         self.address = address
         self.add_phone(phone)
-        self.birthday = Birthday(birthday) if birthday else None
+        self.birthday = self.initialize_birthday(birthday)
+
+    def initialize_birthday(self, birthday):
+        if birthday:
+            if Birthday.validate_birthday(birthday):
+                return Birthday(birthday)
+            else:
+                raise ValueError("Invalid birthday format")
+        return None
 
     def add_email(self, contact_email):
         email = Email(contact_email)
