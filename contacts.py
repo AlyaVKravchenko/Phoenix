@@ -137,7 +137,7 @@ class Birthday(Field):
 
 class AddressBook(UserDict):
     def __init__(self, file_path = "contact_book.bin"):
-        self.data = {}
+        super().__init__()
         self.file_path = file_path
         self.load_data()
         self.page_size = 10  
