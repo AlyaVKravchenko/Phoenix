@@ -1,11 +1,12 @@
 from collections import UserDict
 from datetime import datetime
+from contextlib import suppress
 import re
 import pickle
 
 class Field:
     def __init__(self, value):
-        self.value = value
+        self._value = value
     
     @property
     def value(self):
@@ -21,7 +22,9 @@ class Field:
 
 class Phone(Field):
     def __init__(self, phone_number):
-        value(phone_number)
+        if not self.validate_phone_number(phone_number):
+            raise ValueError("Invalid phone number format")
+        super().__init__(phone_number)
 
     @staticmethod
     def validate_phone_number(phone_number):
@@ -29,14 +32,18 @@ class Phone(Field):
         return True if re.match(pattern, phone_number) else False
 
     @Field.value.setter
-    def value(self, new_phone_number):
+    def set_value(self, new_phone_number):
         if not self.validate_phone_number(new_phone_number):
             raise ValueError("Invalid phone number format")
         self._value = new_phone_number
 
+
+
 class Email(Field):
     def __init__(self, contact_email):
-       value(contact_email)
+        if not self.validate_contact_email(contact_email):
+            raise ValueError("Invalid email format")
+        super().__init__(contact_email)
 
     @staticmethod
     def validate_contact_email(contact_email):
@@ -60,7 +67,7 @@ class Record:
         self.emails = []
         self.address = address
         self.add_phone(phone)
-        self.birthday = set_birthday(Birthday(birthday))
+        self.birthday = Birthday(birthday) if birthday else None
 
     def add_email(self, contact_email):
         email = Email(contact_email)
@@ -122,7 +129,9 @@ class Record:
 
 class Birthday(Field):
     def __init__(self, birthday):
-        value(birthday)
+        if not self.validate_birthday(birthday):
+            raise ValueError("Invalid birthday format")
+        super().__init__(birthday)
 
     @staticmethod
     def validate_birthday(birthday):
@@ -208,14 +217,14 @@ class AddressBook(UserDict):
 
     def load_data(self):
         try:
-            with open(self.file_path, 'rb') as file:
-                data = pickle.load(file)
-            self.data = data
-        except (FileNotFoundError, EOFError):
-            pass
+            with suppress(FileNotFoundError):
+                with open(self.file_path, 'rb') as file:
+                    data = pickle.load(file)
+                self.data = data
+        except FileNotFoundError:
+            print(f"File '{file_path}' not found.")
 
     def save_data(self):
-        
         with open(self.file_path, 'wb') as file:
             pickle.dump(self.data, file)
             print(f"Saved data to {self.file_path}")
@@ -297,7 +306,6 @@ class AddressBook(UserDict):
         return self.data
     
     def show_all(self):
-        
         if not self.data:
             return "Phone book is empty"
         else:
