@@ -89,6 +89,7 @@ class Record:
         if not found:
             raise ValueError("Phone number not found in the record")
             
+
     def find_phone(self, phone_number):
         for phone in self.phones:
             if phone.value == phone_number:
@@ -156,6 +157,7 @@ class AddressBook(UserDict):
     def find(self, name):
         if name in self.data:
             return self.data[name]
+        return None
 
     def delete(self, name):
         if name in self.data:
@@ -183,13 +185,14 @@ class AddressBook(UserDict):
     def edit_email(self, name, old_contact_email, new_contact_email):
         if not Email.validate_contact_email(new_contact_email):
             raise ValueError("Invalid email format")    
+        #found = False
         if name in self.data:
             for name, record in self.data.items():
                 if old_contact_email in record.emails:
                     self.data[name].set_email(new_contact_email)
                     self.data[name].remove_email(old_contact_email)
         else: 
-            print(f"Contact {name.title()} not found.")
+            print(f"Sorry")
 
     def add_address(self, name, address):
         if name in self.data:
@@ -205,6 +208,7 @@ class AddressBook(UserDict):
         if not Birthday.validate_birthday(new_birthday):
             raise ValueError("Invalid birthday format")
         self.data[name].set_birthday(new_birthday)
+
 
     def load_data(self):
         try:
@@ -224,6 +228,16 @@ class AddressBook(UserDict):
         self.save_data() 
 
     def search(self, query):
+        
+        # for name, record in self.data.items():
+        #     search_match = []
+        #     if query in name or any(query in phone.value for phone in record.phones):
+        #         search_match.append(record)
+        #     if search_match:
+        #         for record in search_match:
+        #             print(f"Name: {name}, Phone: {[phone._value for phone in record.phones]}")
+        #     else:
+        #         print("No matching contacts found.")
         found = False
         for name, record in self.data.items():
             if query in name or any(query in phone.value for phone in record.phones):
@@ -231,6 +245,8 @@ class AddressBook(UserDict):
                 found = True
         if not found:
             print("No matching contacts found.")
+
+
 
     def delete_contact(self, name):
         if name in self.data:
@@ -249,7 +265,9 @@ class AddressBook(UserDict):
                 birthday_date = datetime(year=today.year, month=int(month), day=int(day)).date()
                 days_until_birthday = (birthday_date - today).days
                 if 0 < days_until_birthday <= days:
-                    upcoming_birthdays.append((name, days_until_birthday)) 
+                    upcoming_birthdays.append((name, days_until_birthday))
+        
+        #upcoming_birthdays.sort(key=lambda x: x[1])  
         return upcoming_birthdays
 
     def input_error(func):
@@ -264,6 +282,7 @@ class AddressBook(UserDict):
                 return "Invalid command"
 
         return inner
+
     
     def hello(self):
         return "How can I help you?"
@@ -296,6 +315,7 @@ class AddressBook(UserDict):
     def __str__(self):
         return self.data
     
+    
     def show_all(self):
         
         if not self.data:
@@ -305,6 +325,8 @@ class AddressBook(UserDict):
             for name, record in self.data.items():
                 for phone in record.phones:
                     print(f"{name.title()}: tel.: {phone._value}, Email: {record.emails}, Address: {record.address} B: {record.birthday}")
+           
+
     
     def goodbye(self):
         return "Good bye!"
