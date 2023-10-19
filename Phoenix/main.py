@@ -93,7 +93,6 @@ def main():
                 return True
 
             commands = {
-                "hello": phone_book.hello,
                 "new contact": handle_new_contact,
                 "change phone": handle_change_phone,
                 "edit name": handle_edit_name,
