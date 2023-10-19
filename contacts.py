@@ -64,7 +64,7 @@ class Record:
         self.emails = []
         self.address = address
         self.add_phone(phone)
-        self.birthday = self.initialize_birthday(birthday) 
+        self.birthday = self.initialize_birthday(birthday)
 
     def initialize_birthday(self, birthday):
         if birthday:
