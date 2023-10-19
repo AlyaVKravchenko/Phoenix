@@ -1,6 +1,6 @@
-import Phoenix.contacts
-from Phoenix.notebook import Notebook, Note
-import Phoenix.sorter
+from contacts.contacts import AddressBook
+from notebook.notebook import Notebook, Note
+from sorter.sorter import sorter
 
 
 def main():
@@ -84,7 +84,7 @@ def main():
             print("No upcoming birthdays found.")
 
     def handle_contacts():
-        phone_book = Phoenix.contacts.AddressBook()
+        phone_book = AddressBook()
         phone_book.load_data()
         while True:
             user_input = input("Enter command: ").lower()
@@ -162,7 +162,7 @@ def main():
         print(notebook.search_notes_by_name(name))
 
     def handle_notes():
-        notebook = Phoenix.notebook.Notebook()
+        notebook = Notebook()
         notebook.load_data()
 
         while True:
@@ -207,7 +207,7 @@ def main():
 
         elif user_input == "sorter":
             folder_path = input("Enter folder path: ")
-            Phoenix.sorter.main(folder_path)
+            sorter(folder_path)
 
         elif user_input in ["good bye", "close", "exit"]:
             print("Good bye!")
