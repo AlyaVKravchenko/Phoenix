@@ -1,171 +1,219 @@
-import contacts
-from notebook import Notebook, Note
-import sorter
-import re
-from collections import UserDict
+from Phoenix.contacts import contacts
+from Phoenix.notebook import notebook
+from Phoenix.sorter import sorter
+
 
 def main():
-    phone_book = contacts.AddressBook()
-    is_running = True
+    def handle_new_contact(phone_book):
+        name = input("Enter contact name: ").lower()
+        phone = input("Enter phone number: ")
+        print(phone_book.add_contact(name, phone))
+        phone_book.save_data()
 
-    while is_running:
-        user_input = input("Hello! I am your personal assistant! How can I help you? Choose one option (contacts, notes, sorter): ").lower() 
-        
+    def handle_change_phone(phone_book):
+        name = input("Enter contact name: ").lower()
+        phone = input("Enter phone number: ")
+        print(phone_book.change_contact(name, phone))
+        phone_book.save_data()
+
+    def handle_edit_name(phone_book):
+        old_name = input("Enter old contact name: ").lower()
+        new_name = input("Enter new contact name: ").lower()
+        phone_book.edit_name(old_name, new_name)
+        phone_book.save_data()
+        print(f"Name updated for {old_name.title()} to {new_name.title()}")
+
+    def handle_delete_contact(phone_book):
+        name = input("Enter contact name which you want to delete: ").lower()
+        print(phone_book.delete_contact(name))
+        phone_book.save_data()
+
+    def handle_find_phone(phone_book):
+        name = input("Enter contact name: ").lower()
+        print(phone_book.get_phone(name))
+
+    def handle_search_contact(phone_book):
+        query = input("Enter part of contact name: ").lower()
+        phone_book.search(query)
+
+    def handle_add_address(phone_book):
+        name = input("Enter name: ").lower()
+        address = input("Enter contact address: ")
+        phone_book.add_address(name, address)
+        phone_book.save_data()
+
+    def handle_edit_address(phone_book):
+        name = input("Enter name: ").lower()
+        new_address = input("Enter new contact address: ")
+        phone_book.edit_address(name, new_address)
+        phone_book.save_data()
+
+    def handle_add_email(phone_book):
+        name = input("Enter name: ").lower()
+        email = input("Enter contact email: ")
+        phone_book.add_email(name, email)
+        phone_book.save_data()
+
+    def handle_edit_email(phone_book):
+        name = input("Enter name: ").lower()
+        old_email = input("Enter old email: ")
+        new_email = input("Enter new email: ")
+        phone_book.edit_email(name, old_email, new_email)
+        phone_book.save_data()
+
+    def handle_add_birthday(phone_book):
+        name = input("Enter name: ").lower()
+        birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
+        phone_book.add_birthday(name, birthday)
+        phone_book.save_data()
+
+    def handle_edit_birthday(phone_book):
+        name = input("Enter name: ").lower()
+        new_birthday = input("Enter new birthday in format 'YYYY-MM-DD': ")
+        phone_book.edit_birthday(name, new_birthday)
+        phone_book.save_data()
+
+    def handle_upcoming_birthdays(phone_book):
+        days = int(input("Enter the number of upcoming days: "))
+        upcoming_birthdays = phone_book.find_upcoming_birthdays(days)
+        if upcoming_birthdays:
+            print("Upcoming Birthdays:")
+            for name, days_until_birthday in upcoming_birthdays:
+                print(f"{name} ({days_until_birthday} days until their birthday)")
+        else:
+            print("No upcoming birthdays found.")
+
+    def handle_contacts():
+        phone_book = contacts.AddressBook()
+        phone_book.load_data()
+        while True:
+            user_input = input("Enter command: ").lower()
+
+            if user_input == "back":
+                return True
+
+            commands = {
+                "hello": phone_book.hello,
+                "new contact": handle_new_contact,
+                "change phone": handle_change_phone,
+                "edit name": handle_edit_name,
+                "delete contact": handle_delete_contact,
+                "find phone": handle_find_phone,
+                "search contact": handle_search_contact,
+                "add address": handle_add_address,
+                "edit address": handle_edit_address,
+                "add email": handle_add_email,
+                "edit email": handle_edit_email,
+                "add birthday": handle_add_birthday,
+                "edit birthday": handle_edit_birthday,
+                "upcoming birthday": handle_upcoming_birthdays,
+            }
+
+            if user_input in commands:
+                commands[user_input](phone_book)
+
+            if user_input == "show all contacts":
+                phone_book.show_all()
+
+            if user_input == "close":
+                break
+
+            else:
+                keys_as_string = "\n".join(commands.keys())
+                print(f"Use this commands {keys_as_string}")
+
+    def handle_add_note(notebook):
+        note_name = input("Enter note name: ")
+        note_text = input("Enter note text: ")
+        note = Note(note_name)
+        note.edit_text(note_text)
+        notebook.save_data()
+
+    def handle_edit_note(notebook):
+        note_name = input("Enter note name: ")
+        note_text = input("Enter new text: ")
+        notebook.edit_note(note_name, note_text)
+        notebook.save_data()
+
+    def handle_delete_note(notebook):
+        note_name = input("Enter note name: ")
+        notebook.delete_note(note_name)
+        notebook.save_data()
+
+    def handle_add_tag(notebook):
+        note_name = input("Enter note name: ")
+        notes = notebook.search_notes_by_name(note_name)
+        for note in notes:
+            notebook.add_tags(note, [input("Enter tag: ").lower()])
+        notebook.save_data()
+
+    def handle_delete_tag(notebook):
+        tag = input("Enter tag: ")
+        notebook.remove_tag(tag)
+        notebook.save_data()
+
+    def handle_search_note_by_tag(notebook):
+        tag = input("Enter tag: ")
+        print(notebook.search_notes_by_tag(tag))
+
+    def handle_search_note_by_name(notebook):
+        name = input("Enter note name: ")
+        print(notebook.search_notes_by_name(name))
+
+    def handle_notes():
+        note_book = notebook.Notebook()
+        notebook.load_data()
+
+        while True:
+            user_input = input("Enter command: ").lower()
+
+            if user_input == "back":
+                return True
+
+            commands = {
+                "add note": handle_add_note,
+                "edit note": handle_edit_note,
+                "delete note": handle_delete_note,
+                "search note name": handle_search_note_by_name,
+                "search note by tag": handle_search_note_by_tag,
+                "add tag": handle_add_tag,
+                "delete tag": handle_delete_tag
+            }
+
+            if user_input in commands:
+                commands[user_input](note_book)
+
+            if user_input == "view all notes":
+                notebook.view_notes()
+
+            if user_input == "close":
+                break
+
+            else:
+                keys_as_string = "\n".join(commands.keys())
+                print(f"Use this commands {keys_as_string}")
+
+    while True:
+        user_input = input("Hello! I am your personal assistant! How can I help you? Choose one option"
+                           "(contacts, notes, sorter): ").lower()
+
         if user_input == "contacts":
-            print(f"Your data will be saved to {phone_book.file_path} file")
+            handle_contacts()
 
-            while True:
-                
-                user_input = input("Enter command: ").lower()
-
-                if user_input == "hello":
-                    print(phone_book.hello())
-
-                elif user_input.startswith("new"):
-                    name = input("Enter contact name: ").lower()
-                    phone = input("Enter phone number: ")
-                    print(phone_book.add_contact(name, phone)) 
-                    phone_book.save_data()  
-
-                elif user_input.startswith("edit name"):
-                    old_name = input("Enter old contact name: ").lower()
-                    new_name = input("Enter new contact name: ").lower()
-                    phone_book.edit_name(old_name, new_name)
-                    phone_book.save_data()
-                    print(f"Name updated for {old_name.title()} to {new_name.title()}.")
-                                
-                elif user_input.startswith("change phone"):
-                    name = input("Enter contact name: ").lower()
-                    phone = input("Enter new phone number: ")
-                    print(phone_book.change_contact(name, phone))
-                    phone_book.save_data()
-
-                elif user_input.startswith("delete contact"):
-                    name = input("Enter contact name wich you want to delete: ").lower()
-                    print(phone_book.delete_contact(name))
-                    phone_book.save_data()
-
-                # elif user_input.startswith("find phone"):
-                #     name = input("Enter contact name: ").lower()
-                #     print(phone_book.get_phone(name))
-
-                elif user_input == "show all":
-                    print(phone_book.show_all())
-
-                elif user_input.startswith("search"):
-                    query = input("Enter part of contact name: ").lower()
-                    phone_book.search(query)
-
-                elif user_input.startswith("add address"):
-                    name = input("Enter name: ").lower()
-                    address = input("Enter contact address: ")
-                    phone_book.add_address(name, address)
-                    phone_book.save_data()
-
-                elif user_input.startswith("edit address"):
-                    name = input("Enter name: ").lower()
-                    new_address = input("Enter new contact address: ")
-                    phone_book.edit_address(name, new_address)
-                    phone_book.save_data()
-
-                elif user_input.startswith("add email"):
-                    name = input("Enter name: ").lower()
-                    email = input("Enter contact email: ")
-                    phone_book.add_email(name, email)
-                    phone_book.save_data()
-
-                elif user_input.startswith("edit email"):
-                    name = input("Enter name: ").lower()
-                    old_email = input("Enter old email: ")
-                    new_email = input("Enter new email: ")
-                    phone_book.edit_email(name, old_email, new_email)
-                    phone_book.save_data()
-                
-                elif user_input.startswith("add birthday"):
-                    name = input("Enter name: ").lower()
-                    birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
-                    phone_book.add_birthday(name, birthday)
-                    phone_book.save_data()
-
-                elif user_input.startswith("edit birthday"):
-                    name = input("Enter name: ").lower()
-                    new_birthday = input("Enter new birthday in format 'YYYY-MM-DD': ")
-                    phone_book.edit_birthday(name, new_birthday)
-                    phone_book.save_data()
-
-                elif user_input == "upcoming birthdays":
-                    days = int(input("Enter the number of upcoming days: "))
-                    upcoming_birthdays = phone_book.find_upcoming_birthdays(days)
-                    if upcoming_birthdays:
-                        print("Upcoming Birthdays:")
-                        for name, days_until_birthday in upcoming_birthdays:
-                            print(f"{name} ({days_until_birthday} days until their birthday)")
-                    else:
-                        print("No upcoming birthdays found.")
-
-                elif user_input == "back":
-                    phone_book.save_data()
-                    break
- 
-                else:
-                    print("Invalid command")
         elif user_input == "notes":
-            notebook = Notebook()
+            handle_notes()
 
-            while True:
-                user_input = input("Enter command: ").lower()
-
-                if user_input.startswith("add note"):
-                    _, _, name = user_input.split()
-                    note = Note(name)
-                    note.edit_text(input("Enter text: "))
-                    notebook.add_note(note)
-                    notebook.save_data()
-
-                if user_input.startswith("edit note"):
-                    _, _, name = user_input.split()
-                    notebook.edit_note(name, input("Enter new text: "))
-                    notebook.save_data()
-
-                if user_input.startswith("delete note"):
-                    _, _, name = user_input.split()
-                    notebook.delete_note(name)
-                    notebook.save_data()
-
-                if user_input.startswith("search note name"):
-                    _, _, _, name = user_input.split()
-                    print(notebook.search_notes_by_name(name))
-
-                if user_input.startswith("search note tag"):
-                    _, _, _, tag = user_input.split()
-                    print(notebook.search_notes_by_tag(tag))
-
-                if user_input.startswith("view all notes"):
-                    notebook.view_notes()
-
-                if user_input.startswith("add tag"):
-                    _, _, name = user_input.split()
-                    notes = notebook.search_notes_by_name(name)
-                    for note in notes:
-                        notebook.add_tags(note, [input("Enter tag: ").lower()])
-                    notebook.save_data()
-
-                if user_input.startswith("delete tag"):
-                    _, _, name = user_input.split()
-                    notebook.remove_tag(name)
-                    notebook.save_data()
-
-                if user_input.startswith("exit"):
-                    break
-
-        if user_input == "sorter":
+        elif user_input == "sorter":
             folder_path = input("Enter folder path: ")
             sorter.main(folder_path)
+
         elif user_input in ["good bye", "close", "exit"]:
-            print(phone_book.goodbye())
-            is_running = False
+            print("Good bye!")
+            break
+
         else:
-            print("Invalid command")
+            print("invalid command")
+
 
 if __name__ == "__main__":
     main()
