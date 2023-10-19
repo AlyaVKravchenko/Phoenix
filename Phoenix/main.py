@@ -1,6 +1,6 @@
 from Phoenix.contacts import contacts
 from Phoenix.notebook.notebook import Note, Notebook
-from Phoenix.sorter import sorter
+from Phoenix.sorter.sorter import sorter
 
 
 def main():
@@ -35,6 +35,9 @@ def main():
     def handle_search_contact(phone_book):
         query = input("Enter part of contact name: ").lower()
         phone_book.search(query)
+
+    def handle_show_all_contacts(phone_book):
+        print(phone_book.show_all())
 
     def handle_add_address(phone_book):
         name = input("Enter name: ").lower()
@@ -106,15 +109,13 @@ def main():
                 "add birthday": handle_add_birthday,
                 "edit birthday": handle_edit_birthday,
                 "upcoming birthday": handle_upcoming_birthdays,
+                "show all contacts": handle_show_all_contacts,
                 "back or close": "return back"
             }
 
             if user_input in commands:
                 commands[user_input](phone_book)
-
-            if user_input == "show all contacts":
-                phone_book.show_all()
-
+                
             if user_input == "close":
                 break
 
