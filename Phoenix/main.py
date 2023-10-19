@@ -1,6 +1,6 @@
-from Phoenix.contacts import contacts
-from Phoenix.notebook import notebook
-from Phoenix.sorter import sorter
+import Phoenix.contacts
+from Phoenix.notebook import Notebook, Note
+import Phoenix.sorter
 
 
 def main():
@@ -84,7 +84,7 @@ def main():
             print("No upcoming birthdays found.")
 
     def handle_contacts():
-        phone_book = contacts.AddressBook()
+        phone_book = Phoenix.contacts.AddressBook()
         phone_book.load_data()
         while True:
             user_input = input("Enter command: ").lower()
@@ -107,6 +107,7 @@ def main():
                 "add birthday": handle_add_birthday,
                 "edit birthday": handle_edit_birthday,
                 "upcoming birthday": handle_upcoming_birthdays,
+                "back or close": "return back"
             }
 
             if user_input in commands:
@@ -118,7 +119,7 @@ def main():
             if user_input == "close":
                 break
 
-            else:
+            if user_input not in commands:
                 keys_as_string = "\n".join(commands.keys())
                 print(f"Use this commands {keys_as_string}")
 
@@ -161,7 +162,7 @@ def main():
         print(notebook.search_notes_by_name(name))
 
     def handle_notes():
-        note_book = notebook.Notebook()
+        notebook = Phoenix.notebook.Notebook()
         notebook.load_data()
 
         while True:
@@ -177,11 +178,12 @@ def main():
                 "search note name": handle_search_note_by_name,
                 "search note by tag": handle_search_note_by_tag,
                 "add tag": handle_add_tag,
-                "delete tag": handle_delete_tag
+                "delete tag": handle_delete_tag,
+                "back or close": "return back"
             }
 
             if user_input in commands:
-                commands[user_input](note_book)
+                commands[user_input](notebook)
 
             if user_input == "view all notes":
                 notebook.view_notes()
@@ -189,7 +191,7 @@ def main():
             if user_input == "close":
                 break
 
-            else:
+            if user_input not in commands:
                 keys_as_string = "\n".join(commands.keys())
                 print(f"Use this commands {keys_as_string}")
 
@@ -205,15 +207,15 @@ def main():
 
         elif user_input == "sorter":
             folder_path = input("Enter folder path: ")
-            sorter.main(folder_path)
+            Phoenix.sorter.main(folder_path)
 
         elif user_input in ["good bye", "close", "exit"]:
             print("Good bye!")
-            break
+            return False
 
         else:
             print("invalid command")
 
 
 if __name__ == "__main__":
-    main()
+    main() 
