@@ -253,15 +253,12 @@ class AddressBook(UserDict):
         self.save_data() 
 
     def search(self, query):
-        matching_contacts = []
+        found = False
         for name, record in self.data.items():
             if query in name or any(query in phone.value for phone in record.phones):
-                matching_contacts.append((name, [phone._value for phone in record.phones]))
-
-        if matching_contacts:
-            for name, phones in matching_contacts:
-                print(f"Name: {name}, Phone: {phones}")
-        else:
+                print(f"Name: {name}, Phone: {[phone._value for phone in record.phones]}")
+                found = True
+        if not found:
             print("No matching contacts found.")
 
     def delete_contact(self, name):
