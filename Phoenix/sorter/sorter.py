@@ -126,7 +126,7 @@ def get_folder_objects(root_path):
             except OSError:
                 pass
 
-def main(dir_path):
+def sorter(dir_path):
     print(f"Start in {dir_path}")
 
     folder_path = Path(dir_path)
