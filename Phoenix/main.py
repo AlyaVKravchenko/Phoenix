@@ -84,7 +84,7 @@ def main():
             print("No upcoming birthdays found.")
 
     def handle_contacts():
-        phone_book = AddressBook()
+        phone_book = contacts.AddressBook()
         phone_book.load_data()
         while True:
             user_input = input("Enter command: ").lower()
