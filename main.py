@@ -27,13 +27,6 @@ def main():
                     print(phone_book.add_contact(name, phone)) 
                     phone_book.save_data()  
 
-                elif user_input.startswith("edit name"):
-                    old_name = input("Enter old contact name: ").lower()
-                    new_name = input("Enter new contact name: ").lower()
-                    phone_book.edit_name(old_name, new_name)
-                    phone_book.save_data()
-                    print(f"Name updated for {old_name.title()} to {new_name.title()}.")
-                                
                 elif user_input.startswith("change phone"):
                     name = input("Enter contact name: ").lower()
                     phone = input("Enter new phone number: ")
@@ -45,9 +38,9 @@ def main():
                     print(phone_book.delete_contact(name))
                     phone_book.save_data()
 
-                # elif user_input.startswith("find phone"):
-                #     name = input("Enter contact name: ").lower()
-                #     print(phone_book.get_phone(name))
+                elif user_input.startswith("find phone"):
+                    name = input("Enter contact name: ").lower()
+                    print(phone_book.get_phone(name))
 
                 elif user_input == "show all":
                     print(phone_book.show_all())
@@ -81,7 +74,7 @@ def main():
                     phone_book.edit_email(name, old_email, new_email)
                     phone_book.save_data()
                 
-                elif user_input.startswith("add birthday"):
+                elif user_input.startswith("add_birthday"):
                     name = input("Enter name: ").lower()
                     birthday = input("Enter birthday in format 'YYYY-MM-DD': ")
                     phone_book.add_birthday(name, birthday)
@@ -93,7 +86,7 @@ def main():
                     phone_book.edit_birthday(name, new_birthday)
                     phone_book.save_data()
 
-                elif user_input == "upcoming birthdays":
+                elif user_input == "upcoming_birthdays":
                     days = int(input("Enter the number of upcoming days: "))
                     upcoming_birthdays = phone_book.find_upcoming_birthdays(days)
                     if upcoming_birthdays:
@@ -105,6 +98,11 @@ def main():
 
                 elif user_input == "back":
                     phone_book.save_data()
+                    break
+                    
+                elif user_input in ["good bye", "close", "exit"]:
+                    print(phone_book.goodbye())
+                    is_running = False
                     break
  
                 else:
