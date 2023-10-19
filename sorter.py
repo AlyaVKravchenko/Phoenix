@@ -3,10 +3,10 @@ import sys
 from pathlib import Path
 import shutil
 
-
 UKRAINIAN_SYMBOLS = 'абвгдеєжзиіїйклмнопрстуфхцчшщьюя'
-TRANSLATION = ("a", "b", "v", "g", "d", "e", "je", "zh", "z", "y", "i", "ji", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u",
-               "f", "h", "ts", "ch", "sh", "sch", "", "ju", "ja")
+TRANSLATION = (
+"a", "b", "v", "g", "d", "e", "je", "zh", "z", "y", "i", "ji", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u",
+"f", "h", "ts", "ch", "sh", "sch", "", "ju", "ja")
 
 TRANS = {}
 images = []
@@ -24,22 +24,22 @@ registered_extensions = {
     "PNG": images,
     "JPG": images,
     "SVG": images,
-    'AVI':  video,
+    'AVI': video,
     'MP4': video,
     'MOV': video,
     'MKV': video,
     'DOC': documents,
-    'PDF': documents, 
-    'XLSX': documents, 
+    'PDF': documents,
+    'XLSX': documents,
     'PPTX': documents,
     "TXT": documents,
     "DOCX": documents,
-    'MP3': audio, 
-    'OGG': audio, 
-    'WAV': audio, 
+    'MP3': audio,
+    'OGG': audio,
+    'WAV': audio,
     'AMR': audio,
     "ZIP": archives,
-    'GZ': archives, 
+    'GZ': archives,
     'TAR': archives
 }
 
@@ -54,9 +54,10 @@ def normalize(name):
     new_name = re.sub(r'\W', "_", new_name)
     return f"{new_name}.{'.'.join(extension)}"
 
-    
+
 def get_extensions(file_name):
     return Path(file_name).suffix[1:].upper()
+
 
 def scan(folder):
     for item in folder.iterdir():
@@ -67,7 +68,7 @@ def scan(folder):
             continue
 
         extension = get_extensions(file_name=item.name)
-        new_name = folder/item.name
+        new_name = folder / item.name
         if not extension:
             others.append(new_name)
         else:
@@ -80,11 +81,10 @@ def scan(folder):
                 others.append(new_name)
 
 
-
 def hande_file(path, root_folder, dist):
     target_folder = root_folder / dist
     target_folder.mkdir(exist_ok=True)
-    path.replace(target_folder/normalize(path.name))
+    path.replace(target_folder / normalize(path.name))
 
 
 def handle_archive(path, root_folder, dist):
@@ -126,12 +126,12 @@ def get_folder_objects(root_path):
             except OSError:
                 pass
 
-def main():
-    path = sys.argv[1]
-    print(f"Start in {path}")
 
-    folder_path = Path(path)
-    
+def main(dir_path):
+    print(f"Start in {dir_path}")
+
+    folder_path = Path(dir_path)
+
     scan(folder_path)
     for file in images:
         hande_file(file, folder_path, "IMAGES")
@@ -152,11 +152,3 @@ def main():
         handle_archive(file, folder_path, "ARCHIVE")
 
     get_folder_objects(folder_path)
-
-if __name__ == '__main__':
-     path = sys.argv[1]
-     print(f"Start in {path}")
-
-     arg = Path(path)
-    
-     main(arg.resolve())

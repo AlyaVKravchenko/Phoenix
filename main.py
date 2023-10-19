@@ -1,5 +1,5 @@
 from Phoenix.contacts import contacts
-from Phoenix.notebook import notebook
+from Phoenix.notebook import Notebook, Note
 from Phoenix.sorter import sorter
 
 
@@ -161,7 +161,7 @@ def main():
         print(notebook.search_notes_by_name(name))
 
     def handle_notes():
-        note_book = notebook.Notebook()
+        notebook = Notebook()
         notebook.load_data()
 
         while True:
@@ -181,7 +181,7 @@ def main():
             }
 
             if user_input in commands:
-                commands[user_input](note_book)
+                commands[user_input](notebook)
 
             if user_input == "view all notes":
                 notebook.view_notes()
@@ -209,7 +209,7 @@ def main():
 
         elif user_input in ["good bye", "close", "exit"]:
             print("Good bye!")
-            break
+            return False
 
         else:
             print("invalid command")
