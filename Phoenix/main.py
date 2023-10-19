@@ -161,6 +161,9 @@ def main():
         name = input("Enter note name: ")
         print(notebook.search_notes_by_name(name))
 
+    def handle_view_notes(notebook):
+        print(notebook.view_notes())
+
     def handle_notes():
         notebook = Notebook()
         notebook.load_data()
@@ -179,15 +182,13 @@ def main():
                 "search note by tag": handle_search_note_by_tag,
                 "add tag": handle_add_tag,
                 "delete tag": handle_delete_tag,
+                "view all notes": handle_view_notes,
                 "back or close": "return back"
             }
 
             if user_input in commands:
                 commands[user_input](notebook)
-
-            if user_input == "view all notes":
-                notebook.view_notes()
-
+                
             if user_input == "close":
                 break
 
