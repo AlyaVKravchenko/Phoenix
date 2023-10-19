@@ -1,6 +1,6 @@
-from contacts.contacts import AddressBook
-from notebook.notebook import Notebook, Note
-from sorter.sorter import sorter
+from Phoenix.contacts import contacts
+from Phoenix.notebook.notebook import Note, Notebook
+from Phoenix.sorter import sorter
 
 
 def main():
