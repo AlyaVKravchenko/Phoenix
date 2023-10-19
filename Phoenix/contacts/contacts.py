@@ -277,7 +277,8 @@ class AddressBook(UserDict):
         upcoming_birthdays = []
         for name, record in self.data.items():
             if record.birthday:
-                year, month, day = record.birthday.split("-")
+                birthday_str = str(record.birthday)  
+                year, month, day = birthday_str.split("-")
                 birthday_date = datetime(year=today.year, month=int(month), day=int(day)).date()
                 days_until_birthday = (birthday_date - today).days
                 if 0 < days_until_birthday <= days:
