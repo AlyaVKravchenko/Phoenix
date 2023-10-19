@@ -74,9 +74,6 @@ class Record:
                 raise ValueError("Invalid birthday format")
         return None
 
-    def edit_name(self, new_name):
-        self.name = new_name
-
     def add_email(self, contact_email):
         email = Email(contact_email)
         self.emails.append(email)
@@ -171,14 +168,6 @@ class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
 
-    def edit_name(self, old_name, new_name):
-        if old_name in self.data:
-            record = self.data.pop(old_name)
-            record.edit_name(new_name)
-            self.data[new_name] = record
-        else:
-            print(f"Contact {old_name.title()} not found.")
-    
     def find(self, name):
         if name in self.data:
             return self.data[name]
