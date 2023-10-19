@@ -22,7 +22,9 @@ class Field:
 
 class Phone(Field):
     def __init__(self, phone_number):
-        self.value = phone_number
+        if not self.validate_phone_number(phone_number):
+            raise ValueError("Invalid phone number format")
+        super().__init__(phone_number)
 
     @staticmethod
     def validate_phone_number(phone_number):
@@ -30,17 +32,18 @@ class Phone(Field):
         return True if re.match(pattern, phone_number) else False
 
     @Field.value.setter
-    def value(self, new_phone_number):
+    def set_value(self, new_phone_number):
         if not self.validate_phone_number(new_phone_number):
             raise ValueError("Invalid phone number format")
         self._value = new_phone_number
 
+
+
 class Email(Field):
     def __init__(self, contact_email):
-        self.value = contact_email
-
-    def __str__(self):
-        return self.value
+        if not self.validate_contact_email(contact_email):
+            raise ValueError("Invalid email format")
+        super().__init__(contact_email)
 
     @staticmethod
     def validate_contact_email(contact_email):
@@ -64,15 +67,7 @@ class Record:
         self.emails = []
         self.address = address
         self.add_phone(phone)
-        self.birthday = self.initialize_birthday(birthday)
-
-    def initialize_birthday(self, birthday):
-        if birthday:
-            if Birthday.validate_birthday(birthday):
-                return Birthday(birthday)
-            else:
-                raise ValueError("Invalid birthday format")
-        return None
+        self.birthday = Birthday(birthday) if birthday else None
 
     def add_email(self, contact_email):
         email = Email(contact_email)
@@ -134,11 +129,10 @@ class Record:
 
 class Birthday(Field):
     def __init__(self, birthday):
-        self.value = birthday
-    
-    def __str__(self):
-        return self.value
-    
+        if not self.validate_birthday(birthday):
+            raise ValueError("Invalid birthday format")
+        super().__init__(birthday)
+
     @staticmethod
     def validate_birthday(birthday):
         pattern = r'^\d{4}-\d{2}-\d{2}$'
@@ -177,15 +171,12 @@ class AddressBook(UserDict):
             del self.data[name]
     
     def add_birthday(self, name, birthday):
-        # if not Birthday.validate_birthday(birthday):
-        #     raise ValueError("Invalid birthday format")
+        if not Birthday.validate_birthday(birthday):
+            raise ValueError("Invalid birthday format")
         if name in self.data:
-            try:
-                birthday_obj = Birthday(birthday)  
-                self.data[name].set_birthday(birthday_obj)
-                print(f"Birthday added for {name.title()}.")
-            except ValueError as e:
-                print(f"Error: {e}")
+            self.data[name].set_birthday(birthday)
+            print(f"Birthday added for {name.title()}.")
+            
         else:
             print(f"Contact {name.title()} not found.")
         
