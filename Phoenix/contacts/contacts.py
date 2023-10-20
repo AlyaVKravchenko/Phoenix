@@ -242,7 +242,7 @@ class AddressBook(UserDict):
                     data = pickle.load(file)
                 self.data = data
         except FileNotFoundError:
-            print(f"File '{file_path}' not found.")
+            print(f"File not found.")
 
     def save_data(self):
         with open(self.file_path, 'wb') as file:
@@ -298,9 +298,6 @@ class AddressBook(UserDict):
 
         return inner
     
-    def hello(self):
-        return "How can I help you?"
-
     @input_error
     def add_contact(self, name, phone):
         if not Phone.validate_phone_number(phone):
