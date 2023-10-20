@@ -188,8 +188,6 @@ class AddressBook(UserDict):
             del self.data[name]
     
     def add_birthday(self, name, birthday):
-        # if not Birthday.validate_birthday(birthday):
-        #     raise ValueError("Invalid birthday format")
         if name in self.data:
             try:
                 birthday_obj = Birthday(birthday)  

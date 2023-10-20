@@ -96,7 +96,6 @@ def main():
                 "change phone": handle_change_phone,
                 "edit name": handle_edit_name,
                 "delete contact": handle_delete_contact,
-                "find phone": handle_find_phone,
                 "search contact": handle_search_contact,
                 "add address": handle_add_address,
                 "edit address": handle_edit_address,
