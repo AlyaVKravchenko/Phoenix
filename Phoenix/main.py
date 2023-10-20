@@ -28,10 +28,6 @@ def main():
         print(phone_book.delete_contact(name))
         phone_book.save_data()
 
-    def handle_find_phone(phone_book):
-        name = input("Enter contact name: ").lower()
-        print(phone_book.get_phone(name))
-
     def handle_search_contact(phone_book):
         query = input("Enter part of contact name: ").lower()
         phone_book.search(query)
@@ -128,6 +124,7 @@ def main():
         note_text = input("Enter note text: ")
         note = Note(note_name)
         note.edit_text(note_text)
+        notebook.add_note(note)
         notebook.save_data()
 
     def handle_edit_note(notebook):

@@ -1,71 +1,56 @@
-Welcome to Your Personal Assistant - Contact Management System!
+Вітаємо Вас! 
 
-This program allows you to manage your contacts, notes, and upcoming birthdays.
+Якщо Ви хочете скористатись нашим персональним помічником "Phoenix", Вам необхіно:
+встанвити ПЗ відповідно до інструкцій наданих в файлі Readme.md, зайти до командної 
+строки та ввести спеціальну команду Ineedhelp.
 
-To get started, follow these simple instructions:
+Після цього Ви побачите привітання від нашого помічника. Він запропонує Вам вибрати, 
+що саме Ви хочете зробти: відкрити контактну книгу, нотатки чи відсортувати файли в папці.
 
-1. At the main menu, you'll be prompted to choose an option:
-   - "contacts" to work with your contact list.
-   - "notes" to manage your notes.
-   - "sorter" for sorting files in a folder (currently unsupported).
-   - "good bye," "close," or "exit" to exit the program.
+Далі надається детальна інформація по наявним командам в кожному розділі.
 
-Managing Contacts:
--------------------
+Контакти ("contacts"):
 
-In the "contacts" menu, you can perform the following actions:
+Почніть програму і виберіть "contacts".
+Ви можете виконувати наступні команди:
+"new contact" - додати новий контакт, введіть ім'я та номер телефону.
+"change phone" - змінити номер телефону для існуючого контакту.
+"edit name" - змінити ім'я контакту.
+"delete contact" - видалити контакт.
+"search contact" - пошук контактів за частиною імені.
+"add address" - додати адресу контакту.
+"edit address" - змінити адресу контакту.
+"add email" - додати адресу електронної пошти контакту.
+"edit email" - змінити адресу електронної пошти контакту.
+"add birthday" - додати день народження контакту (у форматі 'YYYY-MM-DD').
+"edit birthday" - змінити день народження контакту.
+"upcoming birthday" - вивести інформацію про наближені дні народження через 
+певну кількість днів у майбутньому.
+"show all contacts" - показати всі контакти.
+"close" - вийти з програми "contacts".
 
-- "hello": Get a friendly greeting from your assistant.
+Нотатки ("notes"):
 
-- "new contact": Add a new contact. You'll be prompted to enter the contact's name and phone number.
+Почніть програму і виберіть "notes".
+Ви можете виконувати наступні команди:
+"add note" - додати нову нотатку, введіть назву та текст нотатки.
+"edit note" - змінити текст існуючої нотатки за назвою.
+"delete note" - видалити нотатку за назвою.
+"search note name" - знайти нотатку за назвою.
+"search note by tag" - знайти нотатку за тегом.
+"add tag" - додати тег(и) до нотатки за назвою.
+"delete tag" - видалити тег.
+"view all notes" - переглянути всі нотатки та їхні теги.
+"back" або "close" - повернутися до попереднього меню - вийти з програми "notes".
 
-- "change phone": Update a contact's phone number. Enter the contact's name and the new phone number.
+Сортувальник ("sorter"):
 
-- "delete contact": Delete a contact. Enter the name of the contact you want to delete.
+Почніть програму "sorter".
+Введіть шлях до папки, яку ви хочете відсортувати.
+Програма автоматично сортує файли у вказаній папці за типами (зображення, документи, відео тощо) і розміщує їх у відповідних папках.
+По завершенню сортування програма видасть повідомлення про успішне завершення.
 
-- "find phone": Find the phone number of a contact. Enter the contact's name.
+Вихід з програми забезпечується введенням команди "exit" в головному меню.
 
-- "show all": Display a list of all your contacts.
-
-- "search": Search for contacts by entering a part of the contact's name.
-
-- "add address": Add an address to a contact. Enter the contact's name and the address.
-
-- "add email": Add an email address to a contact. Enter the contact's name and the email.
-
-- "add birthday": Add a birthday to a contact. Enter the contact's name and the birthday in 'YYYY-MM-DD' format.
-
-- "edit birthday": Edit a contact's birthday. Enter the contact's name and the new birthday.
-
-- "upcoming birthdays": Find upcoming birthdays. Enter the number of upcoming days, and the program will show you the contacts with birthdays in that period.
-
-- "back": Go back to the previous menu.
-
-- "good bye," "close," or "exit": Exit the program, and your data will be saved.
-
-Managing Notes:
----------------
-
-In the "notes" menu, you can perform the following actions:
-
-- "add note [name]": Add a new note with the specified name. You'll be prompted to enter the note's text.
-
-- "edit note [name]": Edit the text of an existing note with the specified name.
-
-- "delete note [name]": Delete a note with the specified name.
-
-- "search note name [name]": Search for notes by name. Replace "[name]" with the name you're looking for.
-
-- "search note tag [tag]": Search for notes by tag. Replace "[tag]" with the tag you're looking for.
-
-- "view all notes": Display a list of all your notes.
-
-- "add tag [name]": Add a tag to a note by specifying the note's name. You'll be prompted to enter the tag.
-
-- "delete tag [name]": Remove a tag from a note by specifying the note's name.
-
-- "exit": Exit the notes menu.
-
-That's it! You can now use this program to manage your contacts, notes, and upcoming birthdays efficiently.
-
-Enjoy using your personal assistant!
+Таким чином, ви можете використовувати ці програми для керування вашими контактами, 
+нотатками та сортування файлів у вашій системі.
